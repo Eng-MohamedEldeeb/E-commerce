@@ -14,7 +14,7 @@ export class Category implements ICategory {
       public_id: { type: String },
     }),
   )
-  logo: IFile;
+  image: IFile;
 
   @Prop({ type: String, required: true, unique: true })
   name: string;

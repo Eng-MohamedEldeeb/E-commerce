@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UserRepository } from 'src/db/repositories/user.repo';
 import { TokenService } from 'src/common/utils/token/token.service';
-import { IAuthenticationReq } from '../interfaces/authentication.interface';
+import { IAuthenticationReq } from '../interfaces/ICustomRequest.interface';
 import { TokenTypes } from 'src/common/utils/token/types/token.types';
 import { errorResponse } from '../res/error.response';
 

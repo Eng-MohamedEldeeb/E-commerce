@@ -5,7 +5,8 @@ import { UploadApiResponse } from 'cloudinary';
 
 @Injectable()
 export class CloudService {
-  constructor(private readonly cloud = cloudinary) {}
+  private readonly cloud = cloudinary;
+  constructor() {}
 
   async uploadFile({
     path,

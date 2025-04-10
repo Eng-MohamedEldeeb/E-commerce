@@ -15,5 +15,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     UserModule,
     DashboardModule,
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

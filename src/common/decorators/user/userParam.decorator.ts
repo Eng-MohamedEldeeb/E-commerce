@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { IAuthenticationReq } from 'src/common/interfaces/authentication.interface';
+import { IAuthenticationReq } from 'src/common/interfaces/ICustomRequest.interface';
 import { TUserDocument } from 'src/db/Models/User/Types/User.type';
 
 export const User = createParamDecorator(

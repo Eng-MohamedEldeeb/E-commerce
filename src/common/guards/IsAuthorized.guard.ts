@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserRoles } from 'src/db/Models/User/Types/User.type';
-import { IAuthenticationReq } from '../interfaces/authentication.interface';
+import { IAuthenticationReq } from '../interfaces/ICustomRequest.interface';
 import { roles } from '../decorators/auth/auth.decorator';
 import { errorResponse } from '../res/error.response';
 

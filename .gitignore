@@ -37,7 +37,7 @@ README.md
 !.vscode/extensions.json
 
 # dotenv environment variable files
-/Config
+/config
 .env
 .env.development.local
 .env.test.local
