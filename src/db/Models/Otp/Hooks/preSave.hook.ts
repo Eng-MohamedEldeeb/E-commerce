@@ -1,9 +1,9 @@
 import { NextFunction } from 'express';
 import { TotpDocument } from '../Types/OTP.type';
-import { sendEmail } from 'src/utils/emails/sendEmail';
-import * as emailSchemas from '../../../../utils/emails/schemas/email.schemas';
-import { generateRS } from 'src/utils/randomString/randomString';
-import { hashValue } from 'src/utils/security/bcrypt/hashValue.security';
+import { sendEmail } from 'src/common/utils/emails/sendEmail';
+import * as emailSchemas from '../../../../common/utils/emails/schemas/email.schemas';
+import { generateRS } from 'src/common/utils/randomString/randomString';
+import { hashValue } from 'src/common/utils/security/bcrypt/hashValue.security';
 
 export const otp_PreSave = function (this: TotpDocument, next: NextFunction) {
   if (this.isModified('email')) {

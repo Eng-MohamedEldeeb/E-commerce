@@ -1,4 +1,4 @@
-import { HydratedDocument } from 'mongoose';
-import { OTP } from '../Schema/OTP.schema';
+import { Document, HydratedDocument } from 'mongoose';
+import { OTP } from '../OTP.schema';
 
-export type TotpDocument = HydratedDocument<OTP>;
+export type TotpDocument = HydratedDocument<OTP> & Document;

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { DataBaseService } from './db.repo';
+import { DataBaseRepository } from './db.repo';
 import { TotpDocument } from '../Models/Otp/Types/OTP.type';
 import { InjectModel } from '@nestjs/mongoose';
-import { OTP } from '../Models/Otp/Schema/OTP.schema';
+import { OTP } from '../Models/Otp/OTP.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class OTPRepoService extends DataBaseService<TotpDocument> {
+export class OTPRepository extends DataBaseRepository<TotpDocument> {
   constructor(
     @InjectModel(OTP.name) private readonly otpModel: Model<TotpDocument>,
   ) {

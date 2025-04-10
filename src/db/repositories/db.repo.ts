@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { TSingleReturn } from './Types/dbRepo.types';
 import {
   IFIndByIdAndUpdate,
   IFindByIdOptions,
+  IFIndOneIdAndUpdate,
   IFindOneOptions,
-  TSingleReturn,
-} from './Types/dbRepo.types';
-
+} from './Interfaces/dbRepo.interface';
 @Injectable()
-export abstract class DataBaseService<TDocument> {
+export abstract class DataBaseRepository<TDocument> {
   constructor(private readonly model: Model<TDocument>) {}
 
   create(data: Partial<TDocument>): Promise<TDocument> {
@@ -43,5 +43,9 @@ export abstract class DataBaseService<TDocument> {
     options,
   }: IFIndByIdAndUpdate<TDocument>): TSingleReturn<TDocument> {
     return this.model.findByIdAndUpdate(id, data, options);
+  }
+
+  updateOne({ filter, data, options }: IFIndOneIdAndUpdate<TDocument>) {
+    return this.model.findOneAndUpdate(filter, data, options);
   }
 }

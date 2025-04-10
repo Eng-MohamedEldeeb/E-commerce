@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { envConfig } from 'config/envConfig';
 import { connectDB } from './db/dbConnection';
-import { throttler } from './common/security/throttler.security';
+import { throttler } from './common/utils/security/throttler.security';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { PostModule } from './modules/post/post.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -13,9 +13,7 @@ import { PostModule } from './modules/post/post.module';
     throttler(),
     AuthModule,
     UserModule,
-    PostModule,
+    DashboardModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

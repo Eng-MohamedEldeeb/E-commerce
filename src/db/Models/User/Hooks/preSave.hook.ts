@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { TUserDocument } from '../Types/User.type';
-import { hashValue } from 'src/utils/security/bcrypt/hashValue.security';
-import { encryptValue } from 'src/utils/security/crypto/encrypt.security';
+import { hashValue } from 'src/common/utils/security/bcrypt/hashValue.security';
+import { encryptValue } from 'src/common/utils/security/crypto/encrypt.security';
 
 export const user_PreSave = function (this: TUserDocument, next: NextFunction) {
   if (this.isModified('password')) {

@@ -1,13 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { OTPRepoService } from 'src/db/repositories/otp.repo';
+import { OTPRepository } from 'src/db/repositories/otp.repo';
 import { SignupDTO } from 'src/modules/auth/dto/signup.dto';
-import { compareValues } from 'src/utils/security/bcrypt/compareValue.security';
+import { compareValues } from 'src/common/utils/security/bcrypt/compareValue.security';
 import { errorResponse } from '../res/error.response';
 
 @Injectable()
 export class IsValidOTP implements CanActivate {
-  constructor(private readonly otpRepo: OTPRepoService) {}
+  constructor(private readonly otpRepo: OTPRepository) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();

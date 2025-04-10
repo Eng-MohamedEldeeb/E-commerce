@@ -1,4 +1,4 @@
-import { UserRepoService } from 'src/db/repositories/user.repo';
+import { UserRepository } from 'src/db/repositories/user.repo';
 import { EditProfileDTO } from '../dto/EditProfile.dto';
 import { Types } from 'mongoose';
 import { TUserDocument } from 'src/db/Models/User/Types/User.type';
@@ -7,9 +7,9 @@ import { crudResponse } from 'src/common/res/success.response';
 export const editProfile = async (
   id: Types.ObjectId,
   data: EditProfileDTO,
-  userRepoService: UserRepoService,
+  UserRepository: UserRepository,
 ) => {
-  const updatedUser = await userRepoService.updateById({
+  const updatedUser = await UserRepository.updateById({
     id,
     data,
     options: { projection: Object.keys(data).join(' ') },

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepoService } from 'src/db/repositories/user.repo';
-import { TokenService } from 'src/utils/token/token.service';
+import { UserRepository } from 'src/db/repositories/user.repo';
+import { TokenService } from 'src/common/utils/token/token.service';
 import { getProfile } from './services/getProfile.service';
 import { TUserDocument } from 'src/db/Models/User/Types/User.type';
 import { editProfile } from './services/editProfile.service';
@@ -10,7 +10,7 @@ import { EditProfileDTO } from './dto/EditProfile.dto';
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepoService: UserRepoService,
+    private readonly UserRepository: UserRepository,
     private readonly tokenService: TokenService,
   ) {}
 
@@ -19,7 +19,7 @@ export class UserService {
   }
 
   editProfile(id: Types.ObjectId, editProfileDTO: EditProfileDTO) {
-    return editProfile(id, editProfileDTO, this.userRepoService);
+    return editProfile(id, editProfileDTO, this.UserRepository);
   }
 
   deactivateAccount(/* id: Types.ObjectId */) {}

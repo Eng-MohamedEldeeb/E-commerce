@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { user_PreSave } from '../Hooks/preSave.hook';
+import { user_PreSave } from './Hooks/preSave.hook';
 import { IUser } from 'src/db/Models/User/interfaces/user.interface';
-import { UserRoles } from '../Types/User.type';
+import { UserRoles } from './Types/User.type';
 
 @Schema({ timestamps: true })
 export class User implements IUser {

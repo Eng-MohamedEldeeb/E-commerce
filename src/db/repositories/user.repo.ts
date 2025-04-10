@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { DataBaseService } from './db.repo';
+import { DataBaseRepository } from './db.repo';
 import { TUserDocument } from '../Models/User/Types/User.type';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../Models/User/Schema/User.schema';
+import { User } from '../Models/User/User.schema';
 import { Model, Types } from 'mongoose';
 import { TSingleReturn } from './Types/dbRepo.types';
 import { errorResponse } from 'src/common/res/error.response';
 
 @Injectable()
-export class UserRepoService extends DataBaseService<TUserDocument> {
+export class UserRepository extends DataBaseRepository<TUserDocument> {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<TUserDocument>,

@@ -1,15 +1,15 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { UserRepoService } from 'src/db/repositories/user.repo';
-import { TokenService } from 'src/utils/token/token.service';
+import { UserRepository } from 'src/db/repositories/user.repo';
+import { TokenService } from 'src/common/utils/token/token.service';
 import { IAuthenticationReq } from '../interfaces/authentication.interface';
-import { TokenTypes } from 'src/utils/token/types/token.types';
+import { TokenTypes } from 'src/common/utils/token/types/token.types';
 import { errorResponse } from '../res/error.response';
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
   constructor(
-    private readonly userRepoService: UserRepoService,
+    private readonly UserRepository: UserRepository,
     private readonly tokenService: TokenService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,7 +30,7 @@ export class IsAuthenticated implements CanActivate {
       bearer: bearer.toLowerCase(),
     });
 
-    const user = await this.userRepoService.findById({
+    const user = await this.UserRepository.findById({
       id: tokenData.id,
       projection: { password: 0 },
       options: { lean: true },

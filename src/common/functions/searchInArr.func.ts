@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { compareValues } from 'src/utils/security/bcrypt/compareValue.security';
+import { compareValues } from 'src/common/utils/security/bcrypt/compareValue.security';
 
 export const searchInArrOfObjId = (
   element: Types.ObjectId,
