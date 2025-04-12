@@ -3,16 +3,21 @@ import {
   PopulateOptions,
   ProjectionType,
   QueryOptions,
+  RootFilterQuery,
   Types,
   UpdateQuery,
 } from 'mongoose';
 
 interface IQueryOptions<T> {
-  projection?: ProjectionType<T>;
+  projection?: ProjectionType<T> | string;
   options?: QueryOptions<T>;
   populate?: PopulateOptions | PopulateOptions[];
 }
-
+export interface IFindQuery<T> extends IQueryOptions<T> {
+  filter?: RootFilterQuery<T>;
+  sort?: string;
+  page?: number;
+}
 export interface IUpdateOptions<T> {
   data: UpdateQuery<T>;
   options?: QueryOptions<T>;
