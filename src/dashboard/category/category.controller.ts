@@ -3,6 +3,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Query,
   UseInterceptors,
@@ -14,6 +16,8 @@ import { localMulterConfig } from 'src/common/utils/upload/config/local.upload.c
 import { UserRoles } from 'src/db/Models/User/Types/User.type';
 import { AddCategoryDTO } from './dto/addCategory.dto';
 import { CategoryQueryDTO } from './dto/getCategory.dto';
+import { UpdateCategoryDTO } from './dto/updateCategory.dto';
+import { IsMongoIdDTO } from 'src/common/DTO/mongoId.dto';
 
 @Controller('dashboard/category')
 @UseInterceptors(FileInterceptor('file', localMulterConfig()), CloudInterceptor)
@@ -28,7 +32,15 @@ export class CategoryController {
   @Auth(UserRoles.admin)
   @Post()
   create(@Body() body: AddCategoryDTO) {
-    return { body };
-    // return this.categoryService.create()
+    return this.categoryService.create(body);
+  }
+
+  @Auth(UserRoles.admin)
+  @Patch(':id')
+  update(
+    @Param() categoryID: IsMongoIdDTO,
+    @Body() updateCategoryDTO: UpdateCategoryDTO,
+  ) {
+    return this.categoryService.update(categoryID, updateCategoryDTO);
   }
 }

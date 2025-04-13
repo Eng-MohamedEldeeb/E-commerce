@@ -1,5 +1,6 @@
+import { Types } from 'mongoose';
 import { IUpdateOptions } from './dbRepo.interface';
 
-export interface IUpdateCategoryByName<T> extends IUpdateOptions<T> {
-  name: string;
+export interface IUpdateCategoryById<T> extends IUpdateOptions<T> {
+  id: Types.ObjectId;
 }

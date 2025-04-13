@@ -1,18 +1,16 @@
-import { CloudService } from './../../common/utils/upload/service/cloud.upload.service';
 import { TCategory } from 'src/db/Models/Category/Types/TCategory.types';
 import { CategoryRepository } from './../../db/repositories/category.repo';
 import { Injectable } from '@nestjs/common';
 import { CategoryQueryDTO } from './dto/getCategory.dto';
 import { FilterQuery } from 'mongoose';
+import { IsMongoIdDTO } from 'src/common/DTO/mongoId.dto';
+import { UpdateCategoryDTO } from './dto/updateCategory.dto';
 
 @Injectable()
 export class CategoryService {
-  constructor(
-    private readonly categoryRepository: CategoryRepository,
-    private readonly cloudService: CloudService,
-  ) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  find(query: CategoryQueryDTO) {
+  async find(query: CategoryQueryDTO) {
     let filter: FilterQuery<TCategory> = {};
 
     if (query?.name) {
@@ -33,7 +31,7 @@ export class CategoryService {
         ],
       };
     }
-    return this.categoryRepository.find({
+    return await this.categoryRepository.find({
       filter,
       projection: query.select,
       sort: query.sort,
@@ -41,7 +39,15 @@ export class CategoryService {
     });
   }
 
-  create(data: Partial<TCategory>) {
-    return this.categoryRepository.addCategory(data);
+  async create(data: Partial<TCategory>) {
+    return await this.categoryRepository.addCategory(data);
+  }
+
+  async update({ id }: IsMongoIdDTO, data: UpdateCategoryDTO) {
+    return await this.categoryRepository.updateById({
+      id,
+      data,
+      options: { lean: true, new: true },
+    });
   }
 }

@@ -4,7 +4,7 @@ import { DataBaseRepository } from './db.repo';
 import { Category } from '../Models/Category/Category.schema';
 import { Model } from 'mongoose';
 import { errorResponse } from 'src/common/res/error.response';
-import { IUpdateCategoryByName } from './Interfaces/categoryRepo.interface';
+import { IUpdateCategoryById } from './Interfaces/categoryRepo.interface';
 
 export class CategoryRepository extends DataBaseRepository<TCategory> {
   constructor(@InjectModel(Category.name) categoryModel: Model<TCategory>) {
@@ -17,15 +17,14 @@ export class CategoryRepository extends DataBaseRepository<TCategory> {
     return this.create(data);
   }
 
-  async updateByName({
-    name,
-    data,
-    options,
-  }: IUpdateCategoryByName<TCategory>) {
-    const category = await this.findOne({ filter: { name } });
+  async updateCategory({ id, data, options }: IUpdateCategoryById<TCategory>) {
+    const category = await this.findById({ id });
 
     if (!category)
-      return errorResponse('not-found', `${name} category doesn't exist`);
+      return errorResponse(
+        'not-found',
+        `category with "${String(id)}" id doesn't exist`,
+      );
 
     return await this.updateOne({
       filter: { name },
