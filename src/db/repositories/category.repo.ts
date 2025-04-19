@@ -4,7 +4,7 @@ import { DataBaseRepository } from './db.repo';
 import { Category } from '../Models/Category/Category.schema';
 import { Model } from 'mongoose';
 import { errorResponse } from 'src/common/res/error.response';
-import { IUpdateCategoryById } from './Interfaces/categoryRepo.interface';
+import { IUpdateById } from './Interfaces/dbRepo.interface';
 
 export class CategoryRepository extends DataBaseRepository<TCategory> {
   constructor(@InjectModel(Category.name) categoryModel: Model<TCategory>) {
@@ -17,7 +17,7 @@ export class CategoryRepository extends DataBaseRepository<TCategory> {
     return this.create(data);
   }
 
-  async updateCategory({ id, data, options }: IUpdateCategoryById<TCategory>) {
+  async updateCategory({ id, data, options }: IUpdateById<TCategory>) {
     const category = await this.findById({ id });
 
     if (!category)

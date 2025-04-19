@@ -36,3 +36,6 @@ export interface IFIndOneIdAndUpdate<T> extends IUpdateOptions<T> {
 export interface IFindOneOptions<T> extends IQueryOptions<T> {
   filter: FilterQuery<T>;
 }
+export interface IUpdateById<T> extends IUpdateOptions<T> {
+  id: Types.ObjectId;
+}

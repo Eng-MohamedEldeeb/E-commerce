@@ -16,6 +16,6 @@ export class OTP implements IOtp {
 
 export const otpSchema = SchemaFactory.createForClass(OTP);
 
-otpSchema.index({ email: 1 }, { expires: '1h' });
+otpSchema.index({ email: 1 }, { expires: '10m' });
 
 otpSchema.pre('save', otp_PreSave);

@@ -20,7 +20,7 @@ export class User implements IUser {
   @Prop()
   birthDate: Date;
 
-  @Prop()
+  @Prop({ type: String, enum: UserRoles, default: UserRoles.user })
   role: UserRoles;
 }
 
