@@ -1,26 +1,42 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/common/decorators/auth/auth.decorator';
-import { TUserDocument, UserRoles } from 'src/db/Models/User/Types/User.type';
+import { UserRoles } from 'src/db/Models/User/Types/User.type';
 import { User } from 'src/common/decorators/user/userParam.decorator';
-import { EditProfileDTO, EditProfileIdDTO } from './dto/EditProfile.dto';
+import { Types } from 'mongoose';
+import { AddToCartDTO } from './dto/addToCart.dto';
 
 @Controller('user')
+@Auth(UserRoles.user)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('profile')
-  @Auth(UserRoles.user)
-  getProfile(@User() user: TUserDocument) {
-    return this.userService.getProfile(user);
+  @Post()
+  addToCart(
+    @User('_id') user: Types.ObjectId,
+    @Body() addToCartDTO: AddToCartDTO,
+  ) {
+    return this.userService.addToCart(user, addToCartDTO);
   }
 
-  @Patch('editProfile/:userId')
-  @Auth(UserRoles.user)
-  editProfile(
-    @Param('userId') EditProfileIdDTO: EditProfileIdDTO,
-    @Body() editProfileDTO: EditProfileDTO,
+  @Patch()
+  removeFromCart(
+    @User('_id') user: Types.ObjectId,
+    @Body() productId: Types.ObjectId[],
   ) {
-    return this.userService.editProfile(EditProfileIdDTO.id, editProfileDTO);
+    return this.userService.removeFromCart(user, productId);
+  }
+
+  @Delete()
+  clearCart(@User('_id') user: Types.ObjectId) {
+    return this.userService.clearCart(user);
   }
 }

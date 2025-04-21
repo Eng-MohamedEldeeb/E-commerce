@@ -1,28 +1,115 @@
+import { CartRepository } from './../../db/repositories/cart.repo';
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/db/repositories/user.repo';
-import { TokenService } from 'src/common/utils/token/token.service';
-import { getProfile } from './services/getProfile.service';
-import { TUserDocument } from 'src/db/Models/User/Types/User.type';
-import { editProfile } from './services/editProfile.service';
 import { Types } from 'mongoose';
-import { EditProfileDTO } from './dto/EditProfile.dto';
+import { AddToCartDTO } from './dto/addToCart.dto';
+import { CartFactory } from './factory/cart.factory.service';
+import { errorResponse } from 'src/common/res/error.response';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly UserRepository: UserRepository,
-    private readonly tokenService: TokenService,
-  ) {}
+  constructor(private readonly cartRepository: CartRepository) {}
 
-  getProfile(user: TUserDocument) {
-    return getProfile(user);
+  async addToCart(userId: Types.ObjectId, addToCartDTO: AddToCartDTO) {
+    const cart = await this.cartRepository.findOne({
+      filter: { createdBy: userId },
+    });
+
+    if (!cart) {
+      const cartItem = CartFactory.create({
+        createdBy: userId,
+        cartItem: addToCartDTO,
+      });
+
+      return {
+        success: true,
+        msg: 'Done',
+        cart: await this.cartRepository.create(cartItem),
+      };
+    }
+
+    const isInCart = cart.products.some(
+      (product) =>
+        product.productId.toString() == addToCartDTO.productId.toString(),
+    );
+
+    if (!isInCart) {
+      return {
+        success: true,
+        msg: 'Done',
+        cart: await this.cartRepository.updateOne({
+          filter: {
+            createdBy: userId,
+          },
+          data: {
+            $push: {
+              products: {
+                productId: addToCartDTO.productId,
+                quantity: addToCartDTO.quantity,
+              },
+            },
+          },
+          options: { new: true, lean: true },
+        }),
+      };
+    }
+
+    let productExisted: boolean = false;
+
+    for (const [index, product] of cart.products.entries()) {
+      if (product.productId.toString() == addToCartDTO.productId.toString()) {
+        cart.products[index].quantity = addToCartDTO.quantity;
+        productExisted = true;
+        await cart.save();
+        break;
+      }
+    }
+
+    if (productExisted) return { success: true, msg: 'Done', cart };
   }
 
-  editProfile(id: Types.ObjectId, editProfileDTO: EditProfileDTO) {
-    return editProfile(id, editProfileDTO, this.UserRepository);
+  async removeFromCart(userId: Types.ObjectId, productId: Types.ObjectId[]) {
+    const cart = await this.cartRepository.findOne({
+      filter: { createdBy: userId },
+      projection: { _id: 1 },
+      options: { lean: true },
+    });
+
+    if (!cart) return errorResponse('not-found', "user doesn't have cart yet");
+
+    return {
+      success: true,
+      msg: 'Done',
+      data: await this.cartRepository.updateById({
+        id: cart._id,
+        data: {
+          $pull: {
+            products: { $in: productId },
+          },
+        },
+        options: { new: true, lean: true },
+      }),
+    };
   }
 
-  deactivateAccount(/* id: Types.ObjectId */) {}
+  async clearCart(userId: Types.ObjectId) {
+    const cart = await this.cartRepository.findOne({
+      filter: { createdBy: userId },
+      projection: { _id: 1 },
+      options: { lean: true },
+    });
 
-  deleteAccount(/* id: Types.ObjectId */) {}
+    if (!cart) return errorResponse('not-found', "user doesn't have cart yet");
+
+    return {
+      success: true,
+      msg: 'Done',
+      data: await this.cartRepository.updateById({
+        id: cart._id,
+        data: {
+          products: [],
+        },
+        options: { new: true, lean: true },
+      }),
+    };
+  }
 }
