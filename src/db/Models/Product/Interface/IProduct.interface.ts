@@ -26,7 +26,7 @@ export interface IProduct extends IProductInputs {
 
   reviews?: string[];
 
-  finalePrice: number;
+  finalPrice: number;
 
   createdBy: Types.ObjectId;
 }

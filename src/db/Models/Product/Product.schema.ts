@@ -23,7 +23,7 @@ export class Product implements IProduct {
   discountPercent: number;
 
   @Prop({ type: String })
-  finalePrice: number;
+  finalPrice: number;
 
   @Prop({ type: String })
   folderId: string;

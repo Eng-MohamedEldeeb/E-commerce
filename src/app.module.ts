@@ -4,7 +4,8 @@ import { connectDB } from './db/dbConnection';
 import { throttler } from './common/utils/security/throttler.security';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { DashboardModule } from './dashboard/dashboard.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { SellerModule } from './modules/seller/seller.module';
 
 @Module({
   imports: [
@@ -14,8 +15,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthModule,
     UserModule,
     DashboardModule,
+    SellerModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

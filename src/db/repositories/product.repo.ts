@@ -16,20 +16,4 @@ export class ProductRepository extends DataBaseRepository<TProduct> {
       return errorResponse('conflict', `${data.name} already exist`);
     return this.create(data);
   }
-
-  async updateProduct({ id, data, options }: IUpdateById<TProduct>) {
-    const Product = await this.findById({ id });
-
-    if (!Product)
-      return errorResponse(
-        'not-found',
-        `Product with "${String(id)}" id doesn't exist`,
-      );
-
-    return await this.updateOne({
-      filter: { name },
-      data,
-      options,
-    });
-  }
 }

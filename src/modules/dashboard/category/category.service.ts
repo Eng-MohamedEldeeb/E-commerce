@@ -1,5 +1,5 @@
 import { TCategory } from 'src/db/Models/Category/Types/TCategory.types';
-import { CategoryRepository } from './../../db/repositories/category.repo';
+import { CategoryRepository } from '../../../db/repositories/category.repo';
 import { Injectable } from '@nestjs/common';
 import { CategoryQueryDTO } from './dto/getCategory.dto';
 import { FilterQuery } from 'mongoose';

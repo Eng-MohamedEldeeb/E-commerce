@@ -53,8 +53,3 @@ export class AddProductDTO implements IProductInputs {
   @IsOptional()
   size?: ProductSizes;
 }
-
-export interface IProductFiles {
-  image: Express.Multer.File[];
-  gallery: Express.Multer.File[];
-}

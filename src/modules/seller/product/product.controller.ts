@@ -2,23 +2,27 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
+  Param,
+  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { User } from 'src/common/decorators/user/userParam.decorator';
 import { TUserDocument, UserRoles } from 'src/db/Models/User/Types/User.type';
-import { AddProductDTO, IProductFiles } from './dto/addProduct.dto';
+import { AddProductDTO } from './dto/addProduct.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { localMulterConfig } from 'src/common/utils/upload/config/local.upload.config';
 import { Auth } from 'src/common/decorators/auth/auth.decorator';
 import { ProductService } from './product.service';
+import { IProductFiles } from './factory/interface/IProductFiles.interface';
+import { ProductIdDTO, UpdateProductDTO } from './dto/updateProduct.dto';
 
 @Controller('dashboard/product')
 @Auth(UserRoles.seller)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
-  @Post()
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -28,6 +32,7 @@ export class ProductController {
       localMulterConfig(),
     ),
   )
+  @Post()
   create(
     @User() user: TUserDocument,
     @Body() addProductDTO: AddProductDTO,
@@ -38,6 +43,34 @@ export class ProductController {
       data: addProductDTO,
       files,
     });
+  }
+
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'image', maxCount: 5 },
+        { name: 'gallery', maxCount: 5 },
+      ],
+      localMulterConfig(),
+    ),
+  )
+  @Patch(':productId')
+  @HttpCode(200)
+  async update(
+    @User() user: TUserDocument,
+    @Param() params: ProductIdDTO,
+    @Body() updateProductDTO: UpdateProductDTO,
+    @UploadedFiles() files: IProductFiles,
+  ) {
+    return {
+      success: true,
+      msg: 'done',
+      result: await this.productService.update(user, {
+        productId: params.productId,
+        data: updateProductDTO,
+        files,
+      }),
+    };
   }
 
   @Delete()
