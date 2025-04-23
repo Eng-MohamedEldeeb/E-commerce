@@ -46,7 +46,7 @@ export class AddProductDTO implements IProductInputs {
 
   @Type(() => Number)
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   discountPercent: number;
 
   @IsEnum(ProductSizes)

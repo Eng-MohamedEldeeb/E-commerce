@@ -1,12 +1,13 @@
-import { CartRepository } from './../../db/repositories/cart.repo';
+import { CartRepository } from 'src/db/repositories/cart.repo';
 import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { AddToCartDTO } from './dto/addToCart.dto';
 import { CartFactory } from './factory/cart.factory.service';
 import { errorResponse } from 'src/common/res/error.response';
+import { RemoveFromCartDto } from './dto/removeFromCart.dto';
 
 @Injectable()
-export class UserService {
+export class CartService {
   constructor(private readonly cartRepository: CartRepository) {}
 
   async addToCart(userId: Types.ObjectId, addToCartDTO: AddToCartDTO) {
@@ -67,7 +68,10 @@ export class UserService {
     if (productExisted) return { success: true, msg: 'Done', cart };
   }
 
-  async removeFromCart(userId: Types.ObjectId, productId: Types.ObjectId[]) {
+  async removeFromCart(
+    userId: Types.ObjectId,
+    removeFromCartDto: RemoveFromCartDto,
+  ) {
     const cart = await this.cartRepository.findOne({
       filter: { createdBy: userId },
       projection: { _id: 1 },
@@ -83,7 +87,9 @@ export class UserService {
         id: cart._id,
         data: {
           $pull: {
-            products: { $in: productId },
+            products: {
+              productId: { $in: removeFromCartDto.productIds },
+            },
           },
         },
         options: { new: true, lean: true },

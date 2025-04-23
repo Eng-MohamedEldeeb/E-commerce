@@ -43,11 +43,7 @@ export class ProductFactory {
     });
   }
 
-  async create({
-    createdBy,
-    data,
-    files,
-  }: IAddProductOptions): Promise<IProduct> {
+  async create({ createdBy, data, files }: IAddProductOptions) {
     const {
       name,
       description,
@@ -61,7 +57,10 @@ export class ProductFactory {
 
     const slug = slugify(name, { trim: true, lower: true });
 
-    const finalPrice = this.calcPrice({ originalPrice, discountPercent });
+    const finalPrice = this.calcPrice({
+      originalPrice,
+      discountPercent: discountPercent || 0,
+    });
 
     const folderId = generateRS({ length: 14, charset: 'alphanumeric' });
 

@@ -3,7 +3,6 @@ import { ICart, ICartItems } from './Interface/ICart.interface';
 import { Types } from 'mongoose';
 import { TUserDocument } from '../User/Types/User.type';
 import { User } from '../User/User.schema';
-import { TCategory } from '../Category/Types/TCategory.types';
 
 @Schema({ timestamps: true })
 export class Cart implements ICart {
@@ -21,4 +20,4 @@ export class Cart implements ICart {
   createdBy: Types.ObjectId | TUserDocument;
 }
 
-export const categorySchema = SchemaFactory.createForClass(Cart);
+export const cartSchema = SchemaFactory.createForClass(Cart);
