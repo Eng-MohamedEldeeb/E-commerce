@@ -1,10 +1,10 @@
 import { Types } from 'mongoose';
-import { TUserDocument } from '../../User/Types/User.type';
 import { IFile } from 'src/common/utils/upload/interface/file.interface';
+import { IUser } from '../../User/interfaces/user.interface';
 
 export interface ICategory {
   image: IFile;
   name: string;
   slug: string;
-  createdBy: Types.ObjectId | TUserDocument;
+  createdBy: Types.ObjectId | IUser;
 }

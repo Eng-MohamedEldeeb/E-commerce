@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
 import { TUserDocument } from '../../User/Types/User.type';
-import { TCategory } from '../../Category/Types/TCategory.types';
+import { IProduct } from '../../Product/Interface/IProduct.interface';
 export interface ICartItems {
-  productId: Types.ObjectId | TCategory;
+  productId: Types.ObjectId | IProduct;
   quantity: number;
 }
 export interface ICart {
