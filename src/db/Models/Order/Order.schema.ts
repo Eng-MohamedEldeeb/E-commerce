@@ -1,7 +1,7 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
   IOrder,
-  IOrderItem,
+  IOrderProducts,
   OrderStatus,
   PaymentMethods,
 } from './Interface/IOrder.interface';
@@ -21,7 +21,7 @@ export class Order implements IOrder {
       },
     ]),
   )
-  products: IOrderItem[];
+  products: IOrderProducts[];
 
   @Prop({ type: String })
   address: string;

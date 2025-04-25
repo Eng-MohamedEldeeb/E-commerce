@@ -2,4 +2,5 @@ export type TErrorResponseType =
   | 'bad-req'
   | 'conflict'
   | 'un-authorized'
-  | 'not-found';
+  | 'not-found'
+  | 'interval-error';

@@ -7,7 +7,7 @@ import { confirmEmail } from './services/confirmEmail.service';
 import { signup } from './services/signup.service';
 import { LoginDTO } from './dto/login.dto';
 import { login } from './services/login.service';
-import { TokenService } from 'src/common/utils/token/token.service';
+import { TokenService } from 'src/common/services/token/token.service';
 import { errorResponse } from 'src/common/res/error.response';
 
 @Injectable()

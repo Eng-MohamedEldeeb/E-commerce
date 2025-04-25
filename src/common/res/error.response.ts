@@ -18,6 +18,7 @@ export const errorResponse = (type: TErrorResponseType, msg: string) => {
     case 'un-authorized':
       throw new UnauthorizedException(msg);
     default:
+    case 'interval-error':
       throw new InternalServerErrorException(msg);
   }
 };

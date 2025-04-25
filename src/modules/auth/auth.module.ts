@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { UserRepository } from 'src/db/repositories/user.repo';
 import { OTPRepository } from 'src/db/repositories/otp.repo';
 import { OTPModel } from 'src/db/Models/Otp/OTP.model';
-import { TokenService } from 'src/common/utils/token/token.service';
+import { TokenService } from 'src/common/services/token/token.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Global()

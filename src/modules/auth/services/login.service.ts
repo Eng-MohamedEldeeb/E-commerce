@@ -2,8 +2,8 @@ import { UserRepository } from 'src/db/repositories/user.repo';
 import { LoginDTO } from '../dto/login.dto';
 import { compareValues } from 'src/common/utils/security/bcrypt/compareValue.security';
 import { BadRequestException } from '@nestjs/common';
-import { TokenService } from 'src/common/utils/token/token.service';
-import { ITokens } from 'src/common/utils/token/types/token.types';
+import { TokenService } from 'src/common/services/token/token.service';
+import { ITokens } from 'src/common/services/token/types/token.types';
 import { crudResponse } from 'src/common/res/success.response';
 
 export const login = async (

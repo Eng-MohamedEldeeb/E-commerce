@@ -15,11 +15,12 @@ export enum OrderStatus {
   canceled = 'canceled',
 }
 
-export interface IOrderItem {
+export interface IOrderProducts {
   productId: Types.ObjectId | IProduct;
   name: string;
   quantity: number;
   unitPrice: number;
+  discount?: number;
   finalPrice: number;
 }
 
@@ -31,13 +32,13 @@ export interface IOrderInputs {
 }
 
 export interface IOrder extends IOrderInputs {
-  products: IOrderItem[];
-
-  status: OrderStatus;
+  products: IOrderProducts[];
 
   discount?: number;
   subTotal: number;
   finalPrice: number;
+
+  status: OrderStatus;
 
   paidAt?: Date;
   rejectedReason?: string;
