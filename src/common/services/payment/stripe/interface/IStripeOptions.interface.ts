@@ -1,6 +1,4 @@
-import { Types } from 'mongoose';
 import Stripe from 'stripe';
-
 export interface IStripeOptions {
   customer_email: string;
 
@@ -19,4 +17,5 @@ export interface IStripeOptions {
 export interface IStripeCouponOptions {
   percent_off: number;
   duration: Stripe.CouponCreateParams.Duration;
+  name?: string;
 }

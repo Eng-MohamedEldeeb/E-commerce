@@ -35,9 +35,6 @@ export class CreateOrderDto implements IOrderInputs {
   @IsEnum(PaymentMethods)
   paymentMethod: PaymentMethods;
 
-  @Type(() => Number)
-  @IsNumber()
-  @Max(100)
   @IsOptional()
-  orderDiscount: number;
+  coupon: string;
 }

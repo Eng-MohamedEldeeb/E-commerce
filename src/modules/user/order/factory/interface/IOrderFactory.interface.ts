@@ -5,6 +5,5 @@ import { TUserDocument } from 'src/db/Models/User/Types/User.type';
 
 export interface IOrderFactoryInputs extends IOrderInputs {
   products: ICartItems[];
-  orderDiscount: number;
   user: Types.ObjectId | TUserDocument;
 }

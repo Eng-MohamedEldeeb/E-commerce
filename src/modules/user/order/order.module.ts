@@ -10,6 +10,8 @@ import { CartRepository } from 'src/db/repositories/cart.repo';
 import { CartService } from '../cart/cart.service';
 import { CartModel } from 'src/db/Models/Cart/Cart.model';
 import { StripePaymentService } from 'src/common/services/payment/stripe/stripe.payment.service';
+import { StripeCouponService } from 'src/common/services/payment/stripe/stripe.coupon.service';
+import { StripeService } from 'src/common/services/payment/stripe/stripe.service';
 
 @Module({
   imports: [OrderModel, ProductModel, CartModel],
@@ -21,6 +23,8 @@ import { StripePaymentService } from 'src/common/services/payment/stripe/stripe.
     OrderService,
     CartService,
     StripePaymentService,
+    StripeCouponService,
+    StripeService,
     OrderFactory,
   ],
 })

@@ -51,17 +51,23 @@ export class Order implements IOrder {
   @Prop({ type: Date })
   paidAt?: Date;
 
+  @Prop({ type: Date })
+  canceledAt?: Date;
+
   @Prop({ type: String })
   rejectedReason?: string;
 
-  @Prop({ type: Number })
-  discount?: number;
+  @Prop({ type: String })
+  coupon?: string;
 
   @Prop({ type: Number })
   subTotal: number;
 
   @Prop({ type: Number })
   finalPrice: number;
+
+  @Prop({ type: Number })
+  refundAmount: number;
 }
 
 export const orderSchema = SchemaFactory.createForClass(Order);

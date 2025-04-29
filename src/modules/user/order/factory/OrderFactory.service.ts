@@ -10,31 +10,24 @@ import { IOrderFactoryInputs } from './interface/IOrderFactory.interface';
 @Injectable()
 export class OrderFactory {
   protected readonly orderProducts: IOrderProducts[] = [];
-  protected orderSubTotal: number = 0;
   protected orderFinalPrice: number = 0;
 
   constructor(private readonly productRepository: ProductRepository) {}
 
-  protected createInvoice(orderDiscount: number): {
-    subTotal: number;
+  protected createInvoice(): {
     finalPrice: number;
   } {
     for (const product of this.orderProducts) {
-      this.orderSubTotal += product.finalPrice;
-      console.log({ productFinalPrice: product.finalPrice });
+      this.orderFinalPrice += product.finalPrice;
     }
 
-    this.orderFinalPrice = Math.floor(
-      this.orderSubTotal - ((orderDiscount || 0) / 100) * this.orderSubTotal,
-    );
-
-    return { subTotal: this.orderSubTotal, finalPrice: this.orderFinalPrice };
+    return { finalPrice: this.orderFinalPrice };
   }
 
   async createOrder({
     user,
     products,
-    orderDiscount,
+    coupon,
     address,
     phone,
     note,
@@ -63,7 +56,7 @@ export class OrderFactory {
       });
     }
 
-    const { subTotal, finalPrice } = this.createInvoice(orderDiscount);
+    const { finalPrice } = this.createInvoice();
 
     return {
       address,
@@ -71,8 +64,7 @@ export class OrderFactory {
       note,
       products: this.orderProducts,
       paymentMethod,
-      discount: orderDiscount,
-      subTotal,
+      coupon,
       finalPrice,
       createdBy: user._id,
     };

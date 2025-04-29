@@ -7,7 +7,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { errorResponse } from 'src/common/res/error.response';
 import { TUserDocument } from 'src/db/Models/User/Types/User.type';
-import { OrderIdDto } from './dto/checkout.dto';
 import { StripePaymentService } from 'src/common/services/payment/stripe/stripe.payment.service';
 import {
   OrderStatus,
@@ -15,6 +14,8 @@ import {
 } from 'src/db/Models/Order/Interface/IOrder.interface';
 import { asyncHandler } from 'src/common/decorators/handler/asyncHandler.decorator';
 import { Request } from 'express';
+import { ProductRepository } from 'src/db/repositories/product.repo';
+import { StripeCouponService } from 'src/common/services/payment/stripe/stripe.coupon.service';
 
 @Injectable()
 export class OrderService {
@@ -22,7 +23,9 @@ export class OrderService {
     private readonly cartRepository: CartRepository,
     private readonly orderFactory: OrderFactory,
     private readonly orderRepository: OrderRepository,
+    private readonly productRepository: ProductRepository,
     private readonly stripePaymentService: StripePaymentService,
+    private readonly stripeCouponService: StripeCouponService,
   ) {}
 
   create(userId: Types.ObjectId, createOrderDto: CreateOrderDto) {
@@ -73,6 +76,16 @@ export class OrderService {
         order.finalPrice,
       );
 
+      const discounts: { coupon: string }[] = [];
+
+      if (order?.coupon) {
+        const coupon = await this.stripeCouponService.retrieveCoupon(
+          order.coupon,
+        );
+        if (!coupon)
+          return errorResponse('bad-req', 'in-valid or expired coupon');
+        discounts.push({ coupon: coupon.id });
+      }
       await this.orderRepository.updateById({
         id: order._id,
         data: {
@@ -90,6 +103,7 @@ export class OrderService {
             metadata: {
               orderId: orderId.toString(),
             },
+            discounts,
           }),
           orderIntent,
         },
@@ -97,6 +111,52 @@ export class OrderService {
     });
   }
 
+  refund(user: TUserDocument, orderId: Types.ObjectId) {
+    return asyncHandler(async () => {
+      const order = await this.orderRepository.findOne({
+        filter: {
+          _id: orderId,
+          $or: [
+            {
+              status: OrderStatus.pending,
+            },
+            {
+              status: OrderStatus.placed,
+            },
+          ],
+        },
+      });
+
+      if (!order)
+        return errorResponse(
+          'not-found',
+          'in-valid orderId or not existed Order',
+        );
+
+      if (order.paymentMethod == PaymentMethods.card) {
+        await this.stripePaymentService.refund(order.intentId as string);
+      }
+
+      for (const product of order.products) {
+        await this.productRepository.updateById({
+          id: product.productId as Types.ObjectId,
+          data: {
+            $inc: {
+              stock: product.quantity,
+            },
+          },
+        });
+      }
+      await this.orderRepository.updateById({
+        id: order._id,
+        data: {
+          canceledAt: Date.now(),
+          refundAmount: order.finalPrice,
+        },
+      });
+      return { msg: 'done' };
+    });
+  }
   webhook(request: Request) {
     return asyncHandler(() => {
       return this.stripePaymentService.webhook(request);

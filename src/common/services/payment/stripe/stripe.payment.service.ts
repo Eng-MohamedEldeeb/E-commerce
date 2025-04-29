@@ -1,22 +1,17 @@
-import { OrderRepository } from './../../../../db/repositories/order.repo';
+import { OrderRepository } from '../../../../db/repositories/order.repo';
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import {
-  IStripeCouponOptions,
-  IStripeOptions,
-} from './interface/IStripeOptions.interface';
+import { IStripeOptions } from './interface/IStripeOptions.interface';
 import { errorResponse } from 'src/common/res/error.response';
 import { Request } from 'express';
 import {
   OrderStatus,
   PaymentMethods,
 } from 'src/db/Models/Order/Interface/IOrder.interface';
+import { StripeService } from './stripe.service';
 @Injectable()
 export class StripePaymentService {
-  private readonly stripe: Stripe = new Stripe(
-    process.env.STRIPE_API_KEY as string,
-  );
-
+  private readonly stripe: Stripe = StripeService.getInstance();
   constructor(private readonly orderRepository: OrderRepository) {}
 
   async webhook(request: Request) {
@@ -130,20 +125,5 @@ export class StripePaymentService {
     return await this.stripe.refunds.create({
       payment_intent: paymentIntent.id,
     });
-  }
-
-  async createCoupon({
-    percent_off,
-    duration = 'once',
-  }: IStripeCouponOptions): Promise<Stripe.Response<Stripe.Coupon>> {
-    return this.stripe.coupons.create({
-      currency: 'egp',
-      percent_off,
-      duration,
-    });
-  }
-
-  async retrieveCoupon(id: string): Promise<Stripe.Response<Stripe.Coupon>> {
-    return this.stripe.coupons.retrieve(id);
   }
 }

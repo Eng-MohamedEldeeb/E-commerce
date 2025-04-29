@@ -34,14 +34,15 @@ export interface IOrderInputs {
 export interface IOrder extends IOrderInputs {
   products: IOrderProducts[];
 
-  discount?: number;
   subTotal: number;
   finalPrice: number;
+  refundAmount: number;
 
   status: OrderStatus;
 
   intentId?: string;
   paidAt?: Date;
+  canceledAt?: Date;
   rejectedReason?: string;
 
   createdBy: Types.ObjectId;
