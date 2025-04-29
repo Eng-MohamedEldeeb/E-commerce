@@ -6,7 +6,7 @@ export interface IStripeOptions {
 
   mode?: Stripe.Checkout.SessionCreateParams.Mode;
   metadata?: {
-    orderId: Types.ObjectId;
+    orderId: string;
   } & Stripe.MetadataParam;
 
   line_items: Stripe.Checkout.SessionCreateParams.LineItem[];
@@ -14,4 +14,9 @@ export interface IStripeOptions {
 
   cancel_url?: string;
   success_url?: string;
+}
+
+export interface IStripeCouponOptions {
+  percent_off: number;
+  duration: Stripe.CouponCreateParams.Duration;
 }

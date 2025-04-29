@@ -3,7 +3,7 @@ import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
 import { OrderRepository } from 'src/db/repositories/order.repo';
 import { OrderModel } from 'src/db/Models/Order/Order.model';
-import { OrderFactory } from './factory/OrderFactory..service';
+import { OrderFactory } from './factory/OrderFactory.service';
 import { ProductRepository } from 'src/db/repositories/product.repo';
 import { ProductModel } from 'src/db/Models/Product/Product.model';
 import { CartRepository } from 'src/db/repositories/cart.repo';

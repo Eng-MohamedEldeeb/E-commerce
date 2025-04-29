@@ -10,6 +10,7 @@ import { ProductFactory } from './factory/product.factory.service';
 import { IAddProductOptions } from './factory/interface/IProduct.factory.interface';
 import { IUpdateProductOptions } from './factory/interface/IUpdateProductOptions.interface';
 import { TUserDocument } from 'src/db/Models/User/Types/User.type';
+import { asyncHandler } from 'src/common/decorators/handler/asyncHandler.decorator';
 
 @Injectable()
 export class ProductService {
@@ -22,57 +23,60 @@ export class ProductService {
     this.productFactory = new ProductFactory(this.cloudService);
   }
 
-  async create({ createdBy, data, files }: IAddProductOptions) {
-    const checkCategory = await this.categoryRepository.findById({
-      id: data.categoryId,
-      projection: { _id: 1 },
+  create({ createdBy, data, files }: IAddProductOptions) {
+    return asyncHandler(async () => {
+      const checkCategory = await this.categoryRepository.findById({
+        id: data.categoryId,
+        projection: { _id: 1 },
+      });
+
+      if (!checkCategory)
+        return errorResponse(
+          'not-found',
+          `in-valid categoryId: '${data.categoryId}'`,
+        );
+
+      const productDocument: IProduct = await this.productFactory.create({
+        createdBy,
+        data,
+        files,
+      });
+
+      return await this.productRepository.addProduct(productDocument);
     });
-
-    if (!checkCategory)
-      return errorResponse(
-        'not-found',
-        `in-valid categoryId: '${data.categoryId}'`,
-      );
-
-    const productDocument: IProduct = await this.productFactory.create({
-      createdBy,
-      data,
-      files,
-    });
-
-    return await this.productRepository.addProduct(productDocument);
   }
 
-  async update(
+  update(
     user: TUserDocument,
     { productId, data, files }: IUpdateProductOptions,
   ) {
-    const product = await this.productRepository.findById({
-      id: productId,
-      options: { lean: true },
-    });
+    return asyncHandler(async () => {
+      const product = await this.productRepository.findById({
+        id: productId,
+        options: { lean: true },
+      });
 
-    if (!product)
-      return errorResponse(
-        'not-found',
-        `product with id: ${productId} is not found`,
-      );
+      if (!product)
+        return errorResponse(
+          'not-found',
+          `product with id: ${productId} is not found`,
+        );
 
-    if (product.createdBy.toString() != user._id.toString())
-      return errorResponse(
-        'un-authorized',
-        'You are not the owner of the requested product to proceed',
-      );
+      if (product.createdBy.toString() != user._id.toString())
+        return errorResponse(
+          'un-authorized',
+          'You are not the owner of the requested product to proceed',
+        );
 
-    const newProduct = await this.productFactory.update(product, data, files);
+      const newProduct = await this.productFactory.update(product, data, files);
 
-    return await this.productRepository.updateById({
-      id: productId,
-      data: newProduct,
-      options: { new: true, lean: true },
+      return await this.productRepository.updateById({
+        id: productId,
+        data: newProduct,
+        options: { new: true, lean: true },
+      });
     });
   }
-  delete() {}
 }
 
 export const productDependencies: Partial<ModuleMetadata> = {

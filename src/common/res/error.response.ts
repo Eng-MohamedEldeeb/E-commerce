@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { TErrorResponseType } from './types/errorResponse';
 
-export const errorResponse = (type: TErrorResponseType, msg: string) => {
+export const errorResponse = (
+  type: TErrorResponseType,
+  msg: string | Object | { msg: string; stack: string },
+) => {
   switch (type) {
     case 'bad-req':
       throw new BadRequestException(msg);
@@ -18,7 +21,7 @@ export const errorResponse = (type: TErrorResponseType, msg: string) => {
     case 'un-authorized':
       throw new UnauthorizedException(msg);
     default:
-    case 'interval-error':
+    case 'internal-error':
       throw new InternalServerErrorException(msg);
   }
 };

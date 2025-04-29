@@ -38,5 +38,6 @@ export class CreateOrderDto implements IOrderInputs {
   @Type(() => Number)
   @IsNumber()
   @Max(100)
+  @IsOptional()
   orderDiscount: number;
 }

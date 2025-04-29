@@ -1,4 +1,4 @@
-import { ProductRepository } from './../../../../db/repositories/product.repo';
+import { ProductRepository } from '../../../../db/repositories/product.repo';
 import { Injectable } from '@nestjs/common';
 import { errorResponse } from 'src/common/res/error.response';
 import {
@@ -9,12 +9,11 @@ import { IOrderFactoryInputs } from './interface/IOrderFactory.interface';
 
 @Injectable()
 export class OrderFactory {
-  constructor(
-    private readonly productRepository: ProductRepository,
-    protected readonly orderProducts: IOrderProducts[],
-    protected orderSubTotal: number = 0,
-    protected orderFinalPrice: number = 0,
-  ) {}
+  protected readonly orderProducts: IOrderProducts[] = [];
+  protected orderSubTotal: number = 0;
+  protected orderFinalPrice: number = 0;
+
+  constructor(private readonly productRepository: ProductRepository) {}
 
   protected createInvoice(orderDiscount: number): {
     subTotal: number;
@@ -22,9 +21,12 @@ export class OrderFactory {
   } {
     for (const product of this.orderProducts) {
       this.orderSubTotal += product.finalPrice;
+      console.log({ productFinalPrice: product.finalPrice });
     }
-    this.orderFinalPrice +=
-      this.orderSubTotal - (orderDiscount || 0 / 100) * this.orderSubTotal;
+
+    this.orderFinalPrice = Math.floor(
+      this.orderSubTotal - ((orderDiscount || 0) / 100) * this.orderSubTotal,
+    );
 
     return { subTotal: this.orderSubTotal, finalPrice: this.orderFinalPrice };
   }
@@ -56,12 +58,8 @@ export class OrderFactory {
         productId: checkProduct._id,
         name: checkProduct.name,
         quantity,
-        unitPrice: checkProduct.originalPrice,
-        discount: checkProduct.discountPercent || 0,
-        finalPrice:
-          quantity * checkProduct.originalPrice -
-          (checkProduct.discountPercent / 100) *
-            (quantity * checkProduct.originalPrice),
+        unitPrice: checkProduct.finalPrice,
+        finalPrice: quantity * checkProduct.finalPrice,
       });
     }
 

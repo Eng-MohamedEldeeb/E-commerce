@@ -1,7 +1,7 @@
 import { StripeFactory } from './../../../common/services/payment/stripe/factory/stripe.factory.service';
 import { OrderRepository } from './../../../db/repositories/order.repo';
 import { CartRepository } from './../../../db/repositories/cart.repo';
-import { OrderFactory } from './factory/OrderFactory..service';
+import { OrderFactory } from './factory/OrderFactory.service';
 import { Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/createOrder.dto';
@@ -13,6 +13,8 @@ import {
   OrderStatus,
   PaymentMethods,
 } from 'src/db/Models/Order/Interface/IOrder.interface';
+import { asyncHandler } from 'src/common/decorators/handler/asyncHandler.decorator';
+import { Request } from 'express';
 
 @Injectable()
 export class OrderService {
@@ -23,49 +25,81 @@ export class OrderService {
     private readonly stripePaymentService: StripePaymentService,
   ) {}
 
-  async create(userId: Types.ObjectId, createOrderDto: CreateOrderDto) {
-    const cart = await this.cartRepository.findOne({
-      filter: {
-        createdBy: userId,
-      },
+  create(userId: Types.ObjectId, createOrderDto: CreateOrderDto) {
+    return asyncHandler(async () => {
+      const cart = await this.cartRepository.findOne({
+        filter: {
+          createdBy: userId,
+        },
+      });
+
+      if (!cart?.products.length) return errorResponse('bad-req', 'empty Cart');
+
+      const orderData = await this.orderFactory.createOrder({
+        user: userId,
+        products: cart.products,
+        ...createOrderDto,
+      });
+
+      return {
+        success: true,
+        msg: 'Done',
+        data: await this.orderRepository.create(orderData),
+      };
     });
-
-    if (!cart?.products.length) return errorResponse('bad-req', 'empty Cart');
-
-    const orderData = await this.orderFactory.createOrder({
-      user: userId,
-      products: cart.products,
-      ...createOrderDto,
-    });
-
-    return {
-      success: true,
-      msg: 'Done',
-      data: await this.orderRepository.create(orderData),
-    };
   }
 
-  async checkout(user: TUserDocument, orderId: OrderIdDto) {
-    const order = await this.orderRepository.findOne({
-      filter: {
-        createdBy: user._id,
-        status: OrderStatus.pending,
-        paymentMethod: PaymentMethods.card,
-      },
-      populate: [
-        {
-          path: 'products',
+  checkout(user: TUserDocument, orderId: Types.ObjectId) {
+    return asyncHandler(async () => {
+      const order = await this.orderRepository.findOne({
+        filter: {
+          _id: orderId,
+          status: OrderStatus.pending,
+          paymentMethod: PaymentMethods.card,
         },
-      ],
+        populate: [
+          {
+            path: 'products.productId',
+          },
+        ],
+      });
+
+      if (!order) return errorResponse('bad-req', 'in-valid orderId');
+
+      const lineItems = StripeFactory.createLineItems(order.products);
+      console.log(lineItems);
+
+      const orderIntent = await this.stripePaymentService.createPaymentIntent(
+        order.finalPrice,
+      );
+
+      await this.orderRepository.updateById({
+        id: order._id,
+        data: {
+          intentId: orderIntent.id,
+        },
+      });
+
+      return {
+        success: true,
+        msg: 'Done',
+        data: {
+          checkoutSession: await this.stripePaymentService.checkoutSession({
+            customer_email: user.email,
+            line_items: lineItems,
+            metadata: {
+              orderId: orderId.toString(),
+            },
+          }),
+          orderIntent,
+        },
+      };
     });
+  }
 
-    if (!order) return errorResponse('bad-req', 'in-valid orderId');
-
-    const lineItems = StripeFactory.createLineItems(order.products);
-
-    const checkoutSession = await this.stripePaymentService.checkout({
-      customer_email: user.email,
-      line_items: lineItems,
+  webhook(request: Request) {
+    return asyncHandler(() => {
+      return this.stripePaymentService.webhook(request);
     });
   }
 }

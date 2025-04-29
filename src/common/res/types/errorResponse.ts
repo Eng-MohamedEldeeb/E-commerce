@@ -3,4 +3,4 @@ export type TErrorResponseType =
   | 'conflict'
   | 'un-authorized'
   | 'not-found'
-  | 'interval-error';
+  | 'internal-error';

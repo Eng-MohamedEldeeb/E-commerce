@@ -11,11 +11,9 @@ export class StripeFactory {
 
         price_data: {
           currency: 'egp',
-
           product_data: {
             name: product.name,
           },
-
           unit_amount: product.unitPrice * 100,
         },
       };

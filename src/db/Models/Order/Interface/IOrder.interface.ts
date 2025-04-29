@@ -20,7 +20,6 @@ export interface IOrderProducts {
   name: string;
   quantity: number;
   unitPrice: number;
-  discount?: number;
   finalPrice: number;
 }
 
@@ -29,6 +28,7 @@ export interface IOrderInputs {
   phone: string;
   note?: string;
   paymentMethod: PaymentMethods;
+  coupon?: string;
 }
 
 export interface IOrder extends IOrderInputs {
@@ -40,6 +40,7 @@ export interface IOrder extends IOrderInputs {
 
   status: OrderStatus;
 
+  intentId?: string;
   paidAt?: Date;
   rejectedReason?: string;
 

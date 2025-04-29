@@ -15,6 +15,7 @@ export class Order implements IOrder {
     raw([
       {
         productId: { type: Types.ObjectId, ref: Product.name, required: true },
+        name: { type: String, required: true },
         quantity: { type: Number, required: true },
         unitPrice: { type: Number, required: true },
         finalPrice: { type: Number, required: true },
@@ -43,6 +44,9 @@ export class Order implements IOrder {
 
   @Prop({ type: String, enum: OrderStatus, default: OrderStatus.pending })
   status: OrderStatus;
+
+  @Prop({ type: String })
+  intentId?: string;
 
   @Prop({ type: Date })
   paidAt?: Date;
