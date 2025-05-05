@@ -1,6 +1,6 @@
 import { IFile } from 'src/common/utils/upload/interface/file.interface';
 import { IProduct, ProductSizes } from './Interface/IProduct.interface';
-import { Types } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Category } from '../Category/Category.schema';
 import { User } from '../User/User.schema';
@@ -40,10 +40,10 @@ export class Product implements IProduct {
   @Prop({ type: Array<String> })
   color?: string[];
 
-  @Prop({ type: Types.ObjectId, ref: Category.name })
+  @Prop({ type: SchemaTypes.ObjectId, ref: Category.name })
   categoryId: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: User.name })
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
   createdBy: Types.ObjectId;
 
   @Prop({ type: Array<String> })

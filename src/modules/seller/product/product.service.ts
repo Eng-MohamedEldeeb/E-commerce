@@ -1,7 +1,7 @@
 import { Injectable, ModuleMetadata } from '@nestjs/common';
 import { errorResponse } from 'src/common/res/error.response';
 import { CloudService } from 'src/common/utils/upload/service/cloud.upload.service';
-import { CategoryModel } from 'src/db/Models/Category/Category.model';
+import { categoryModel } from 'src/db/Models/Category/Category.model';
 import { IProduct } from 'src/db/Models/Product/Interface/IProduct.interface';
 import { ProductModel } from 'src/db/Models/Product/Product.model';
 import { CategoryRepository } from 'src/db/repositories/category.repo';
@@ -80,7 +80,7 @@ export class ProductService {
 }
 
 export const productDependencies: Partial<ModuleMetadata> = {
-  imports: [ProductModel, CategoryModel],
+  imports: [ProductModel, categoryModel],
   providers: [
     ProductService,
     ProductFactory,

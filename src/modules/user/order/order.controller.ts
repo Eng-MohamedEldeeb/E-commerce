@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Req } from '@nestjs/common';
+import { Controller, Post, Body, Param, Req, HttpCode } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { User } from 'src/common/decorators/user/userParam.decorator';
@@ -22,8 +22,16 @@ export class OrderController {
 
   @Auth(UserRoles.user)
   @Post('checkout/:orderId')
+  @HttpCode(200)
   checkout(@User() user: TUserDocument, @Param() orderIdDto: OrderIdDto) {
     return this.orderService.checkout(user, orderIdDto.orderId);
+  }
+
+  @Auth(UserRoles.user)
+  @Post('refound/:orderId')
+  @HttpCode(200)
+  refund(@Param() orderIdDto: OrderIdDto) {
+    return this.orderService.refund(orderIdDto.orderId);
   }
 
   @Post('/webhook')

@@ -5,7 +5,7 @@ import {
   OrderStatus,
   PaymentMethods,
 } from './Interface/IOrder.interface';
-import { Types } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
 import { Product } from '../Product/Product.schema';
 import { User } from '../User/User.schema';
 
@@ -36,10 +36,10 @@ export class Order implements IOrder {
   @Prop({ type: String, enum: PaymentMethods, default: PaymentMethods.card })
   paymentMethod: PaymentMethods;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
   createdBy: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: User.name })
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
   updatedBy?: Types.ObjectId;
 
   @Prop({ type: String, enum: OrderStatus, default: OrderStatus.pending })

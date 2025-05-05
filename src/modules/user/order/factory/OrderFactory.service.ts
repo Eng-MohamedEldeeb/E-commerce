@@ -6,6 +6,7 @@ import {
   IOrderProducts,
 } from 'src/db/Models/Order/Interface/IOrder.interface';
 import { IOrderFactoryInputs } from './interface/IOrderFactory.interface';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class OrderFactory {
@@ -39,11 +40,13 @@ export class OrderFactory {
           _id: productId,
         },
       });
+
       if (!checkProduct)
         return errorResponse(
           'not-found',
           'in-valid product id or out of stock',
         );
+
       if (checkProduct.stock < quantity)
         return errorResponse('bad-req', 'Product is out of stock');
 
@@ -53,6 +56,13 @@ export class OrderFactory {
         quantity,
         unitPrice: checkProduct.finalPrice,
         finalPrice: quantity * checkProduct.finalPrice,
+      });
+
+      await this.productRepository.updateById({
+        id: productId as Types.ObjectId,
+        data: {
+          stock: checkProduct.stock - quantity,
+        },
       });
     }
 

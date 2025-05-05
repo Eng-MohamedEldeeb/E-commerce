@@ -1,12 +1,12 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { Category, categorySchema } from './Category.schema';
 import slugify from 'slugify';
+import { Brand, brandSchema } from './Brand.schema';
 
-export const categoryModel = MongooseModule.forFeatureAsync([
+export const brandModel = MongooseModule.forFeatureAsync([
   {
-    name: Category.name,
+    name: Brand.name,
     useFactory() {
-      categorySchema.pre('updateOne', function (next) {
+      brandSchema.pre('updateOne', function (next) {
         const updatedFields = this.getUpdate();
 
         if (updatedFields?.['name']) {
@@ -18,7 +18,7 @@ export const categoryModel = MongooseModule.forFeatureAsync([
 
         return next();
       });
-      return categorySchema;
+      return brandSchema;
     },
   },
 ]);

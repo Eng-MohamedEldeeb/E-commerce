@@ -111,7 +111,7 @@ export class OrderService {
     });
   }
 
-  refund(user: TUserDocument, orderId: Types.ObjectId) {
+  refund(orderId: Types.ObjectId) {
     return asyncHandler(async () => {
       const order = await this.orderRepository.findOne({
         filter: {
@@ -157,6 +157,7 @@ export class OrderService {
       return { msg: 'done' };
     });
   }
+
   webhook(request: Request) {
     return asyncHandler(() => {
       return this.stripePaymentService.webhook(request);

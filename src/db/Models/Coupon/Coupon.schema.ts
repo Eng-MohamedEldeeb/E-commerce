@@ -15,6 +15,7 @@ export class Coupon implements ICoupon {
     required: true,
   })
   duration: string;
+
   @Prop({ type: String, required: true })
   percent_off: number;
 }

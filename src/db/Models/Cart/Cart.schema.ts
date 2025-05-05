@@ -1,6 +1,6 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ICart, ICartItems } from './Interface/ICart.interface';
-import { Types } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
 import { TUserDocument } from '../User/Types/User.type';
 import { User } from '../User/User.schema';
 
@@ -16,7 +16,12 @@ export class Cart implements ICart {
   )
   products: ICartItems[];
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true, unique: true })
+  @Prop({
+    type: SchemaTypes.ObjectId,
+    ref: User.name,
+    required: true,
+    unique: true,
+  })
   createdBy: Types.ObjectId | TUserDocument;
 }
 
