@@ -24,7 +24,7 @@ export class OneCartResponse implements ICart {
 }
 
 @ObjectType()
-export class SuccessAddToCartResponse {
+export class SuccessCartResponse {
   @Field(() => Boolean)
   success: boolean;
 

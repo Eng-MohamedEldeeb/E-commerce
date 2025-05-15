@@ -12,7 +12,7 @@ type OneCartResponse {
   createdBy: ID!
 }
 
-type SuccessAddToCartResponse {
+type SuccessCartResponse {
   success: Boolean!
   msg: String!
   cart: OneCartResponse
@@ -99,7 +99,7 @@ type OneCouponResponse {
 }
 
 type Query {
-  getCart: [OneCartResponse!]!
+  getCart: SuccessCartResponse
   getOrders: [OneOrderResponse!]!
   getCategories(name: String, page: Float, sort: String, select: String): [OneCategoryResponse!]!
   getBrands(name: String, page: Float, sort: String, select: String): [OneBrandResponse!]!
@@ -108,7 +108,7 @@ type Query {
 }
 
 type Mutation {
-  addToCart(addToCartArgs: AddToCartDTO!): SuccessAddToCartResponse!
+  addToCart(addToCartArgs: AddToCartDTO!): SuccessCartResponse!
   createOrder(createOrderArgs: CreateOrderDto!): SuccessCreateOrderResponse!
   createCoupon: OneCouponResponse!
 }

@@ -6,11 +6,10 @@ import {
   OneFileResponse,
 } from 'src/common/utils/upload/interface/file.interface';
 import { ICategory } from 'src/db/Models/Category/Interface/ICategory.interface';
-import {
-  IUser,
-  OneUserResponse,
-} from 'src/db/Models/User/interfaces/user.interface';
+
 import { ICategoryQuery } from 'src/modules/dashboard/category/dto/getCategory.dto';
+import { OneUserResponse } from '../../../user/types/oneUserResponse.type';
+import { IUser } from 'src/db/Models/User/interfaces/user.interface';
 
 @ObjectType()
 export class OneCategoryResponse implements ICategory {

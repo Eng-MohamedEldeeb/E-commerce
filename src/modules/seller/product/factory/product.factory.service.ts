@@ -71,7 +71,7 @@ export class ProductFactory {
 
     let gallery: IFile[] = [];
 
-    if (files.gallery.length) {
+    if (files.gallery?.length) {
       for (const file of files.gallery) {
         const { secure_url, public_id } = await this.uploadProductFile({
           folderId,
