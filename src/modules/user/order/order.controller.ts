@@ -7,7 +7,7 @@ import { OrderIdDto } from './dto/checkout.dto';
 import { TUserDocument, UserRoles } from 'src/db/Models/User/Types/User.type';
 import { Request } from 'express';
 import { Auth } from 'src/common/decorators/auth/auth.decorator';
-@Controller('order')
+@Controller('user/order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
