@@ -28,6 +28,12 @@ export class OrderService {
     private readonly stripeCouponService: StripeCouponService,
   ) {}
 
+  getOrders(userId: Types.ObjectId) {
+    return asyncHandler(async () => {
+      return this.orderRepository.findOne({ filter: { createdBy: userId } });
+    });
+  }
+
   create(userId: Types.ObjectId, createOrderDto: CreateOrderDto) {
     return asyncHandler(async () => {
       const cart = await this.cartRepository.findOne({
@@ -70,7 +76,6 @@ export class OrderService {
       if (!order) return errorResponse('bad-req', 'in-valid orderId');
 
       const lineItems = StripeFactory.createLineItems(order.products);
-      console.log(lineItems);
 
       const orderIntent = await this.stripePaymentService.createPaymentIntent(
         order.finalPrice,
@@ -86,6 +91,7 @@ export class OrderService {
           return errorResponse('bad-req', 'in-valid or expired coupon');
         discounts.push({ coupon: coupon.id });
       }
+
       await this.orderRepository.updateById({
         id: order._id,
         data: {
@@ -93,20 +99,18 @@ export class OrderService {
         },
       });
 
+      await this.stripePaymentService.checkoutSession({
+        customer_email: user.email,
+        line_items: lineItems,
+        metadata: {
+          orderId: orderId.toString(),
+        },
+        discounts,
+      });
+
       return {
         success: true,
         msg: 'Done',
-        data: {
-          checkoutSession: await this.stripePaymentService.checkoutSession({
-            customer_email: user.email,
-            line_items: lineItems,
-            metadata: {
-              orderId: orderId.toString(),
-            },
-            discounts,
-          }),
-          orderIntent,
-        },
       };
     });
   }

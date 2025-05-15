@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
 import { IFile } from 'src/common/utils/upload/interface/file.interface';
+import { IUser } from '../../User/interfaces/user.interface';
+import { ICategory } from '../../Category/Interface/ICategory.interface';
 
 export enum ProductSizes {
   s = 's',
@@ -7,6 +9,7 @@ export enum ProductSizes {
   lg = 'lg',
   xlg = 'xlg',
 }
+
 export interface IProductInputs {
   name: string;
   description?: string;
@@ -15,9 +18,10 @@ export interface IProductInputs {
   discountPercent: number;
   size?: ProductSizes;
   color?: string[];
-  categoryId: Types.ObjectId;
+  categoryId: Types.ObjectId | ICategory;
 }
 export interface IProduct extends IProductInputs {
+  _id?: Types.ObjectId;
   slug: string;
 
   folderId: string;
@@ -28,5 +32,5 @@ export interface IProduct extends IProductInputs {
 
   finalPrice: number;
 
-  createdBy: Types.ObjectId;
+  createdBy: Types.ObjectId | IUser;
 }

@@ -4,6 +4,8 @@ import { SchemaTypes, Types } from 'mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Category } from '../Category/Category.schema';
 import { User } from '../User/User.schema';
+import { IUser } from '../User/interfaces/user.interface';
+import { ICategory } from '../Category/Interface/ICategory.interface';
 
 @Schema({ timestamps: true })
 export class Product implements IProduct {
@@ -41,10 +43,10 @@ export class Product implements IProduct {
   color?: string[];
 
   @Prop({ type: SchemaTypes.ObjectId, ref: Category.name })
-  categoryId: Types.ObjectId;
+  categoryId: Types.ObjectId | ICategory;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
-  createdBy: Types.ObjectId;
+  createdBy: Types.ObjectId | IUser;
 
   @Prop({ type: Array<String> })
   reviews: string[];

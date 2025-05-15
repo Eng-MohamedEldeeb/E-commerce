@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BrandQueryDTO } from './dto/getBrand.dto';
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { IsMongoIdDTO } from 'src/common/DTO/mongoId.dto';
 import { UpdateBrandDTO } from './dto/updateBrand.dto';
 import { asyncHandler } from 'src/common/decorators/handler/asyncHandler.decorator';
@@ -38,15 +38,19 @@ export class BrandService {
         projection: query.select,
         sort: query.sort,
         page: query.page,
+        populate: [{ path: 'relatedCategory' }, { path: 'createdBy' }],
       });
     });
   }
 
-  create(data: Partial<TBrand>) {
+  create(userId: Types.ObjectId, data: Partial<TBrand>) {
     return asyncHandler(async () => {
-      const category = await this.brandRepository.create(data);
+      const brand = await this.brandRepository.create({
+        ...data,
+        createdBy: userId,
+      });
       return {
-        category,
+        brand,
       };
     });
   }

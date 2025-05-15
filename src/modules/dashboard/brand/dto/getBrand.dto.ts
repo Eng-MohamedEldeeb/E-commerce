@@ -1,7 +1,11 @@
 import { IsOptional, IsString, MinLength } from 'class-validator';
-import { QueryFindDTO } from 'src/common/DTO/query.dto';
+import { IQueryFind, QueryFindDTO } from 'src/common/DTO/query.dto';
 
-export class BrandQueryDTO extends QueryFindDTO {
+export interface IBrandQuery extends IQueryFind {
+  name: string;
+}
+
+export class BrandQueryDTO extends QueryFindDTO implements IBrandQuery {
   @IsString()
   @MinLength(1)
   @IsOptional()

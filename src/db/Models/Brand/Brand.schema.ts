@@ -5,7 +5,8 @@ import { TUserDocument } from '../User/Types/User.type';
 import { User } from '../User/User.schema';
 import { IFile } from 'src/common/utils/upload/interface/file.interface';
 import slugify from 'slugify';
-import { TBrand } from './Types/TBrand.types';
+import { Category } from '../Category/Category.schema';
+import { TCategory } from '../Category/Types/TCategory.types';
 
 @Schema({ timestamps: true })
 export class Brand implements IBrand {
@@ -31,8 +32,8 @@ export class Brand implements IBrand {
   @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
   createdBy: Types.ObjectId | TUserDocument;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
-  relatedCategory: Types.ObjectId | TBrand;
+  @Prop({ type: SchemaTypes.ObjectId, ref: Category.name })
+  relatedCategory: Types.ObjectId | TCategory;
 }
 
 export const brandSchema = SchemaFactory.createForClass(Brand);

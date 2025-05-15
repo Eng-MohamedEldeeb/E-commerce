@@ -18,21 +18,27 @@ import { AddCategoryDTO } from './dto/addCategory.dto';
 import { CategoryQueryDTO } from './dto/getCategory.dto';
 import { UpdateCategoryDTO } from './dto/updateCategory.dto';
 import { IsMongoIdDTO } from 'src/common/DTO/mongoId.dto';
+import { User } from 'src/common/decorators/user/userParam.decorator';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('dashboard/category')
-@UseInterceptors(FileInterceptor('file', localMulterConfig()), CloudInterceptor)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
+  @CacheTTL(1000)
   getCategories(@Query() query: CategoryQueryDTO) {
     return this.categoryService.find(query);
   }
 
-  @Auth(UserRoles.admin)
   @Post()
-  create(@Body() body: AddCategoryDTO) {
-    return this.categoryService.create(body);
+  @Auth(UserRoles.admin)
+  @UseInterceptors(
+    FileInterceptor('file', localMulterConfig()),
+    CloudInterceptor,
+  )
+  create(@User('_id') userId, @Body() body: AddCategoryDTO) {
+    return this.categoryService.create(userId, body);
   }
 
   @Auth(UserRoles.admin)

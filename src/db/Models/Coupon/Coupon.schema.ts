@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ICoupon } from './Interface/ICoupon.interface';
-import { Types } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
+import { User } from '../User/User.schema';
 
 @Schema({ timestamps: true })
 export class Coupon implements ICoupon {
@@ -18,6 +19,9 @@ export class Coupon implements ICoupon {
 
   @Prop({ type: String, required: true })
   percent_off: number;
+
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
+  createdBy: Types.ObjectId;
 }
 
 export const couponSchema = SchemaFactory.createForClass(Coupon);

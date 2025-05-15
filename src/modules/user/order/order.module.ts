@@ -12,20 +12,22 @@ import { CartModel } from 'src/db/Models/Cart/Cart.model';
 import { StripePaymentService } from 'src/common/services/payment/stripe/stripe.payment.service';
 import { StripeCouponService } from 'src/common/services/payment/stripe/stripe.coupon.service';
 import { StripeService } from 'src/common/services/payment/stripe/stripe.service';
+import { OrderResolver } from 'src/modules/graphql/resolvers/user/order/order.resolver';
 
 @Module({
   imports: [OrderModel, ProductModel, CartModel],
   controllers: [OrderController],
   providers: [
+    OrderService,
     OrderRepository,
+    OrderFactory,
+    OrderResolver,
     ProductRepository,
     CartRepository,
-    OrderService,
     CartService,
     StripePaymentService,
     StripeCouponService,
     StripeService,
-    OrderFactory,
   ],
 })
 export class OrderModule {}

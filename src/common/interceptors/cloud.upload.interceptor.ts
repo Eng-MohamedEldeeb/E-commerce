@@ -5,7 +5,6 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { catchError, Observable, throwError } from 'rxjs';
 import { IFileReq } from '../interfaces/ICustomRequest.interface';
 

@@ -27,7 +27,7 @@ export class Category implements ICategory {
   })
   slug: string;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
+  @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
   createdBy: Types.ObjectId | TUserDocument;
 }
 

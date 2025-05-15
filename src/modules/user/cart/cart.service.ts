@@ -11,7 +11,15 @@ import { asyncHandler } from 'src/common/decorators/handler/asyncHandler.decorat
 export class CartService {
   constructor(private readonly cartRepository: CartRepository) {}
 
-  async addToCart(userId: Types.ObjectId, addToCartDTO: AddToCartDTO) {
+  getCart(userId: Types.ObjectId) {
+    return asyncHandler(async () => {
+      return await this.cartRepository.findOne({
+        filter: { createdBy: userId },
+      });
+    });
+  }
+
+  addToCart(userId: Types.ObjectId, addToCartDTO: AddToCartDTO) {
     return asyncHandler(async () => {
       const cart = await this.cartRepository.findOne({
         filter: { createdBy: userId },

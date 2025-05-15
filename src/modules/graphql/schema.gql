@@ -1,0 +1,132 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type OneCartItem {
+  productId: ID!
+  quantity: Int!
+}
+
+type OneCartResponse {
+  products: [OneCartItem!]!
+  createdBy: ID!
+}
+
+type SuccessAddToCartResponse {
+  success: Boolean!
+  msg: String!
+  cart: OneCartResponse
+}
+
+type OneUserResponse {
+  _id: ID!
+  fullName: String!
+  email: String!
+  birthDate: DateTime!
+  phone: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type OneOrderResponse {
+  address: String!
+  phone: String!
+  note: String
+  coupon: String
+  paymentMethod: String!
+  finalPrice: Int!
+  status: String!
+  createdBy: OneUserResponse!
+}
+
+type SuccessCreateOrderResponse {
+  success: Boolean!
+  msg: String!
+  data: OneOrderResponse
+}
+
+type OneFileResponse {
+  public_id: String!
+  secure_url: String!
+}
+
+type OneCategoryResponse {
+  _id: ID!
+  name: String!
+  slug: String!
+  image: OneFileResponse!
+  createdBy: OneUserResponse!
+}
+
+type OneBrandResponse {
+  _id: ID!
+  name: String!
+  slug: String!
+  image: OneFileResponse!
+  createdBy: OneUserResponse
+  relatedCategory: OneCategoryResponse
+}
+
+type OneProductResponse {
+  _id: ID!
+  name: String!
+  slug: String!
+  image: OneFileResponse!
+  gallery: [OneFileResponse!]
+  folderId: String
+  categoryId: OneCategoryResponse!
+  color: [String!]
+  createdBy: OneUserResponse!
+  description: String
+  discountPercent: Int!
+  finalPrice: Int!
+  originalPrice: Int!
+  stock: Int!
+  reviews: [String!]
+  size: String
+}
+
+type OneCouponResponse {
+  _id: ID!
+  couponId: ID!
+  duration: String!
+  name: String!
+  percent_off: Int!
+  createdBy: ID!
+}
+
+type Query {
+  getCart: [OneCartResponse!]!
+  getOrders: [OneOrderResponse!]!
+  getCategories(name: String, page: Float, sort: String, select: String): [OneCategoryResponse!]!
+  getBrands(name: String, page: Float, sort: String, select: String): [OneBrandResponse!]!
+  getAllProducts: [OneProductResponse!]!
+  getCoupons: [OneCouponResponse!]!
+}
+
+type Mutation {
+  addToCart(addToCartArgs: AddToCartDTO!): SuccessAddToCartResponse!
+  createOrder(createOrderArgs: CreateOrderDto!): SuccessCreateOrderResponse!
+  createCoupon: OneCouponResponse!
+}
+
+input AddToCartDTO {
+  productId: ID!
+  quantity: Int!
+}
+
+input CreateOrderDto {
+  phone: String!
+  address: String!
+  note: String
+  paymentMethod: PaymentMethods!
+  coupon: String
+}
+
+enum PaymentMethods {
+  cash
+  card
+}

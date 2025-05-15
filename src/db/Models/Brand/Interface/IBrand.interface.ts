@@ -9,6 +9,7 @@ export interface IBrandInputs {
 }
 
 export interface IBrand extends IBrandInputs {
+  _id?: Types.ObjectId;
   image: IFile;
   slug: string;
   createdBy: Types.ObjectId | IUser;

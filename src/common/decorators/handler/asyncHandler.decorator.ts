@@ -6,7 +6,7 @@ export const asyncHandler = async (fn: Function) => {
   } catch (error) {
     if (error instanceof Error)
       return errorResponse('internal-error', {
-        msg: error.message,
+        msg: error,
         stack: error.stack,
       });
     return errorResponse('internal-error', error);

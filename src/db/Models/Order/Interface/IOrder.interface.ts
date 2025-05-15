@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { IProduct } from '../../Product/Interface/IProduct.interface';
+import { IUser } from '../../User/interfaces/user.interface';
 
 export enum PaymentMethods {
   cash = 'cash',
@@ -45,6 +46,6 @@ export interface IOrder extends IOrderInputs {
   canceledAt?: Date;
   rejectedReason?: string;
 
-  createdBy: Types.ObjectId;
-  updatedBy?: Types.ObjectId;
+  createdBy: Types.ObjectId | IUser;
+  updatedBy?: Types.ObjectId | IUser;
 }

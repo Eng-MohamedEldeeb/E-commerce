@@ -18,6 +18,9 @@ import { AddBrandDTO } from './dto/addBrand.dto';
 import { BrandQueryDTO } from './dto/getBrand.dto';
 import { UpdateBrandDTO } from './dto/updateBrand.dto';
 import { IsMongoIdDTO } from 'src/common/DTO/mongoId.dto';
+import { Types } from 'mongoose';
+import { User } from 'src/common/decorators/user/userParam.decorator';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('dashboard/brand')
 @UseInterceptors(FileInterceptor('file', localMulterConfig()), CloudInterceptor)
@@ -25,14 +28,15 @@ export class BrandController {
   constructor(private readonly brandService: BrandService) {}
 
   @Get()
+  @CacheTTL(1000)
   getCategories(@Query() query: BrandQueryDTO) {
     return this.brandService.find(query);
   }
 
   @Auth(UserRoles.admin)
   @Post()
-  create(@Body() body: AddBrandDTO) {
-    return this.brandService.create(body);
+  create(@User('_id') userId: Types.ObjectId, @Body() body: AddBrandDTO) {
+    return this.brandService.create(userId, body);
   }
 
   @Auth(UserRoles.admin)

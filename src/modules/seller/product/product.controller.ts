@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   HttpCode,
   Param,
   Patch,
@@ -19,8 +18,8 @@ import { ProductService } from './product.service';
 import { IProductFiles } from './factory/interface/IProductFiles.interface';
 import { ProductIdDTO, UpdateProductDTO } from './dto/updateProduct.dto';
 
-@Controller('dashboard/product')
 @Auth(UserRoles.seller)
+@Controller('dashboard/product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
   @UseInterceptors(
@@ -72,7 +71,4 @@ export class ProductController {
       }),
     };
   }
-
-  @Delete()
-  delete() {}
 }

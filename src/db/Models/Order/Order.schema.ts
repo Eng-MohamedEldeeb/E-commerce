@@ -8,6 +8,7 @@ import {
 import { SchemaTypes, Types } from 'mongoose';
 import { Product } from '../Product/Product.schema';
 import { User } from '../User/User.schema';
+import { IUser } from '../User/interfaces/user.interface';
 
 @Schema({ timestamps: true })
 export class Order implements IOrder {
@@ -37,10 +38,10 @@ export class Order implements IOrder {
   paymentMethod: PaymentMethods;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
-  createdBy: Types.ObjectId;
+  createdBy: Types.ObjectId | IUser;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
-  updatedBy?: Types.ObjectId;
+  updatedBy?: Types.ObjectId | IUser;
 
   @Prop({ type: String, enum: OrderStatus, default: OrderStatus.pending })
   status: OrderStatus;

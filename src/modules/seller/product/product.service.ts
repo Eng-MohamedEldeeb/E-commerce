@@ -1,9 +1,7 @@
-import { Injectable, ModuleMetadata } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { errorResponse } from 'src/common/res/error.response';
 import { CloudService } from 'src/common/utils/upload/service/cloud.upload.service';
-import { categoryModel } from 'src/db/Models/Category/Category.model';
 import { IProduct } from 'src/db/Models/Product/Interface/IProduct.interface';
-import { ProductModel } from 'src/db/Models/Product/Product.model';
 import { CategoryRepository } from 'src/db/repositories/category.repo';
 import { ProductRepository } from 'src/db/repositories/product.repo';
 import { ProductFactory } from './factory/product.factory.service';
@@ -22,7 +20,13 @@ export class ProductService {
   ) {
     this.productFactory = new ProductFactory(this.cloudService);
   }
-
+  getAll() {
+    return asyncHandler(async () => {
+      return await this.productRepository.find({
+        populate: [{ path: 'categoryId' }, { path: 'createdBy' }],
+      });
+    });
+  }
   create({ createdBy, data, files }: IAddProductOptions) {
     return asyncHandler(async () => {
       const checkCategory = await this.categoryRepository.findById({
@@ -78,14 +82,3 @@ export class ProductService {
     });
   }
 }
-
-export const productDependencies: Partial<ModuleMetadata> = {
-  imports: [ProductModel, categoryModel],
-  providers: [
-    ProductService,
-    ProductFactory,
-    ProductRepository,
-    CloudService,
-    CategoryRepository,
-  ],
-};

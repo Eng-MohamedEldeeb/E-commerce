@@ -1,10 +1,17 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ContextType,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { UserRepository } from 'src/db/repositories/user.repo';
 import { TokenService } from 'src/common/services/token/token.service';
 import { IAuthenticationReq } from '../interfaces/ICustomRequest.interface';
 import { TokenTypes } from 'src/common/services/token/types/token.types';
 import { errorResponse } from '../res/error.response';
+import { GqlExecutionContext } from '@nestjs/graphql';
+export type GraphContextType = 'graphql' | ContextType;
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
@@ -13,9 +20,20 @@ export class IsAuthenticated implements CanActivate {
     private readonly tokenService: TokenService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const { authorization } = context
-      .switchToHttp()
-      .getRequest<Request>().headers;
+    let authorization: string | undefined;
+
+    switch (context.getType<GraphContextType>()) {
+      case 'http':
+        authorization = context.switchToHttp().getRequest<Request>()
+          .headers.authorization;
+        break;
+
+      case 'graphql':
+        authorization =
+          GqlExecutionContext.create(context).getContext().req.headers
+            .authorization;
+        break;
+    }
 
     if (!authorization) return errorResponse('un-authorized', 'Missing Token');
 
@@ -38,7 +56,11 @@ export class IsAuthenticated implements CanActivate {
 
     if (!user) return errorResponse('not-found', "User Doesn't Exist");
 
-    context.switchToHttp().getRequest<IAuthenticationReq>().user = user;
+    if (context.getType<GraphContextType>() == 'http')
+      context.switchToHttp().getRequest<IAuthenticationReq>().user = user;
+
+    if (context.getType<GraphContextType>() == 'graphql')
+      GqlExecutionContext.create(context).getContext().req.user = user;
 
     return true;
   }
