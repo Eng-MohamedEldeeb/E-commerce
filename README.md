@@ -1,8 +1,6 @@
-### <h1>Routes:</h1>
+## <h1>Routes:</h1>
 
-## <h2>Api-Endpoints:</h2>
-
-<a href="https://documenter.getpostman.com/view/37407571/2sB2qUp5iQ">Postman Link</a>
+## <h2>Api-Endpoints: <a href="https://documenter.getpostman.com/view/37407571/2sB2qUp5iQ">Postman Link</a></h2>
 
 <h2>Auth</h2>
 
