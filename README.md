@@ -1,6 +1,6 @@
-### <h1>Routes</h1>:
+### <h1>Routes:</h1>
 
-## <h2>Api-Endpoints</h2>:
+## <h2>Api-Endpoints:</h2>
 
 <a href="https://documenter.getpostman.com/view/37407571/2sB2qUp5iQ">Postman Link</a>
 
@@ -77,9 +77,9 @@
 
 <p>POST: refund</p>
 
-## <h2>GraphQL</h2>:
+## <h2>GraphQL:</h2>:
 
-# <h3>Query</h3>
+# <h3>Query:</h3>
 
 <p>getCategories</p>
 <p>getBrands</p>
@@ -88,7 +88,7 @@
 <p>getCart</p>
 <p>getOrders</p>
 
-# <h3>Mutation</h3>
+# <h3>Mutation:</h3>
 
 <p>addToCart</p>
 <p>createOrder</p>
