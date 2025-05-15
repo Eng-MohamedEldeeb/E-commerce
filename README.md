@@ -75,9 +75,9 @@
 
 <p>POST: refund</p>
 
-## <h2>GraphQL:</h2>:
+## <h2>GraphQL:</h2>
 
-# <h3>Query:</h3>
+<h3>Query:</h3>
 
 <p>getCategories</p>
 <p>getBrands</p>
