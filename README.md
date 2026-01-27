@@ -1,4 +1,180 @@
-## <h1>Routes:</h1>
+🛒 E-Commerce Backend API (NestJS)
+
+A scalable and production-ready E-Commerce Backend built with NestJS, designed to handle real-world business logic including orders, payments, discounts, authentication, and admin dashboard operations.
+
+This project focuses on clean architecture, secure payment processing, and modular design.
+
+
+---
+
+🚀 Tech Stack
+
+NestJS – Backend framework
+
+TypeScript – Strongly typed JavaScript
+
+MongoDB / PostgreSQL (configurable) – Database
+
+Stripe – Payments & discount coupons
+
+JWT – Authentication
+
+Nodemailer – Email service
+
+Redis (optional) – OTP & caching
+
+
+
+---
+
+✨ Features Overview
+
+🔐 Authentication & Authorization
+
+User registration & login
+
+JWT-based authentication
+
+Role-based authorization (Admin / User)
+
+Secure password hashing
+
+OTP verification (email-based)
+
+
+
+---
+
+📧 OTP & Email Service
+
+Generate and validate OTP codes
+
+Email delivery using Nodemailer
+
+OTP expiration handling
+
+Secure retry & resend logic
+
+
+
+---
+
+🧑‍💼 Admin Dashboard Endpoints
+
+Create & manage Categories
+
+Create & manage Brands
+
+Admin-only protected routes
+
+Centralized validation & error handling
+
+
+
+---
+
+🛍️ Cart Management
+
+Add products to cart
+
+Remove items from cart
+
+Update item quantities
+
+Empty cart
+
+Auto cart-user binding
+
+
+
+---
+
+📦 Orders Management
+
+Place orders from cart
+
+Order validation & stock checking
+
+Order status tracking
+
+Secure user-order ownership
+
+
+
+---
+
+💳 Stripe Payment Integration
+
+Create Stripe checkout sessions
+
+Secure payment processing
+
+Stripe Webhook handling
+
+Payment confirmation & order update
+
+
+
+---
+
+🎟️ Discounts & Coupons (Stripe)
+
+Generate discount / coupon codes
+
+Apply discounts to orders
+
+Percentage & fixed-amount discounts
+
+Stripe-managed validation
+
+
+
+---
+
+🧩 Architecture Highlights
+
+Modular NestJS structure
+
+Separation of concerns (Controllers / Services / DTOs)
+
+Centralized error handling
+
+Environment-based configuration
+
+Scalable & maintainable codebase
+
+
+
+---
+
+🔑 Environment Variables
+
+Create a .env file and configure the following:
+
+PORT=3000
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=your_stripe_secret
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+EMAIL_HOST=smtp_host
+EMAIL_PORT=587
+EMAIL_USER=email@example.com
+EMAIL_PASS=email_password
+
+
+---
+
+▶️ Running the Project
+
+# Install dependencies
+npm install
+
+# Run in development
+npm run start:dev
+
+# Build for production
+
+# <h1>Routes:</h1>
 
  <h2>Api-Endpoints: <a href="https://documenter.getpostman.com/view/37407571/2sB2qUp5iQ">Postman Link</a></h2>
 
