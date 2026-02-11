@@ -12,7 +12,9 @@ class IsMatchedWithConstrain implements ValidatorConstraintInterface {
     return args.object[args.constraints[0] as string] == value;
   }
   defaultMessage(args: ValidationArguments): string {
-return `${args.constraints[0]} Doesn't match ${args.property}`;
+    // return `${args.object[args.constraints[0] as string]} Doesn't match ${args.object[args.property]}`;
+
+    return `${args.constraints[0]} Doesn't match ${args.property}`;
   }
 }
 
