@@ -23,9 +23,9 @@ export function IsMatchedWith(
   return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'isMatchedWith',
-      target: object.constructor, // the Object that used in this custom decorator.
-      propertyName: propertyName, // the property with the custom decorator declared on.
-      constraints: [matchWith], // the properties given.
+      target: object.constructor, 
+      propertyName: propertyName, 
+      constraints: [matchWith], 
       options: validationOptions,
       validator: IsMatchedWithConstrain,
     });
